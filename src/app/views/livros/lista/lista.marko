@@ -1,0 +1,28 @@
+<html>
+<head>
+    <meta charset="utf-8">
+</head>
+<body>
+    <h1> Listagem de livros </h1>
+    <table id="livros">
+        <thead>
+            <th>Título</th>
+            <th>Preço</th>
+            <th>Descrição</th>
+            <th></th>
+            <th></th>
+        </thead>
+        <tbody>
+        <tr id="livro_${livro.id}" for(livro in data.livros)>
+            <td>${livro.titulo}</td>
+            <td>${livro.preco}</td>
+            <td>${livro.descricao}</td>
+            <td><a href="/livros/form/${livro.id}">Editar</a></td>
+            <td><a href="#" data-ref="${livro.id}" data-type="remocao">Apagar</a></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <script src="/estatico/js/remover-livros.js"></script>
+</body>
+</html>
