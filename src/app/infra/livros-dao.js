@@ -7,7 +7,7 @@ class LivrosDAO{
     buscarPorId(id){   
         return new Promise((resolve, reject)=>{ 
             this._db.all("select * from livros where id="+id, (error, result)=>{                
-                if(error) return reject("Não foi possível buscar os dados no banco");
+                if(error) return reject(error);
 
                 return resolve(result);
             });

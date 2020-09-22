@@ -20,4 +20,17 @@ app.use(methodOverride(function (req, res) {
 const rotas = require('../app/rotas/routes');
 rotas(app);
 
+
+app.use(function(req, res, next){
+  return res.status(404).marko(require("../app/views/erro/404.marko"))
+});
+
+
+app.use(function (erro, req, resp, next) {
+  return resp.status(500).marko(
+     require("../app/views/erro/500.marko")
+  );
+});
+
+
 module.exports = app;

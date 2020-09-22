@@ -17,7 +17,7 @@ module.exports = (app)=>{
                     livros
                 }
             )
-        ).catch(error=> {throw error});
+        ).catch(error=> {console.log(error)});
     });
 
     app.get("/livros/form/:id",function(req,res){
@@ -32,7 +32,9 @@ module.exports = (app)=>{
                     }
                 )
             }
-        ).catch(error=> {console.log("Erro gerado: " + error)})
+        ).catch(error=> {
+            console.log(error)
+        })
     });
 
     app.get("/livros/form",function(req, res){
@@ -53,7 +55,9 @@ module.exports = (app)=>{
                     }
                 )
             }
-        ).catch(error=> {console.log("Erro gerado: " + error)})
+        ).catch(error=> {
+            console.log(error)
+        });
     });
 
 
@@ -62,7 +66,7 @@ module.exports = (app)=>{
 
         livrosDAO.inserir(body)
             .then(()=>res.redirect("/livros"))
-            .catch((error)=>{throw error});
+            .catch((error)=>{console.log(error)});
         
     });
 
@@ -70,7 +74,7 @@ module.exports = (app)=>{
         const { body } = req;
         livrosDAO.atualizar(body)
             .then(()=>res.status(200).end())
-            .catch((error)=>{throw error});
+            .catch((error)=>{console.log(error)});
 
     });
 
@@ -79,6 +83,6 @@ module.exports = (app)=>{
 
         livrosDAO.remover(id)
             .then(()=>res.status(200).end())
-            .catch((error)=>{throw error});
+            .catch((error)=>{console.log(error); res.status(404)});
     })
 }
