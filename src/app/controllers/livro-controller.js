@@ -2,7 +2,7 @@ const LivrosDAO = require("../infra/livros-dao");
 const { validationResult } = require('express-validator/check');
 const db = require('../../config/database');
 const livrosDAO = new LivrosDAO(db);
-
+const templates = require("../views/templates");
 
 class LivroController{
 
@@ -19,7 +19,7 @@ class LivroController{
         return function (req, res) {
             livrosDAO.listar().then(
                 livros => res.marko(
-                    require("../views/livros/lista/lista.marko"),
+                    templates.livros.lista,
                     {
                         livros
                     }
@@ -35,7 +35,7 @@ class LivroController{
             livrosDAO.buscarPorId(id).then(
                 livro => {
                     res.marko(
-                        require("../views/livros/form/form.marko"),
+                        templates.livros.form,
                         {
                             livro: livro[0]
                         }
@@ -49,7 +49,7 @@ class LivroController{
 
     mostrarFormCadastro(){
         return function(req, res){
-            res.marko( require("../views/livros/form/form.marko"), {livro:{}})
+            res.marko(templates.livros.form, {livro:{}})
         }
     }
 
@@ -61,7 +61,7 @@ class LivroController{
             livrosDAO.buscarPorId(id).then(
                 livros => {
                     res.marko(
-                        require("../views/livros/lista/lista.marko"),
+                        templates.livros.lista,
                         {
                             livros
                         }
@@ -78,7 +78,7 @@ class LivroController{
             const errors = validationResult(req);
             if (!errors.isEmpty()) {
               return res.marko(
-                  require("../views/livros/form/form.marko"),
+                    templates.livros.form,
                     {
                         livro:req.body,
                         errosValidacao: errors.array()
@@ -101,7 +101,7 @@ class LivroController{
             const errors = validationResult(req);
             if (!errors.isEmpty()) {
               return res.marko(
-                  require("../views/livros/form/form.marko"),
+                    templates.livros.form,
                     {
                         livro:req.body,
                         errosValidacao: errors.array()
