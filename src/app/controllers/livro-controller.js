@@ -6,6 +6,15 @@ const livrosDAO = new LivrosDAO(db);
 
 class LivroController{
 
+    static rotas(){
+        return{
+            lista: "/livros",
+            cadastro: "/livros/form",
+            edicao: "/livros/form/:id",
+            idDoLivro: "/livros/:id"
+        }
+    }
+
     listar(){
         return function (req, res) {
             livrosDAO.listar().then(
