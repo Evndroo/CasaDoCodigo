@@ -1,101 +1,33 @@
-const db = require("../../config/database");
-const LivrosDAO = require("../infra/livros-dao");
-const { check, validationResult } = require('express-validator/check');
 
-const livrosDAO = new LivrosDAO(db);
+const { check } = require('express-validator/check');
+
+const LivroController = require("../controllers/livro-controller");
+const livroController = new LivroController();
+
+const HomeController = require("../controllers/home-controller");
+const homeController = new HomeController();
 
 module.exports = (app)=>{
-    app.get('/', function (req, res) {
-        res.marko(require("../views/index.marko"));
-    });
+    app.get('/', homeController.home());
     
-    app.get('/livros', function (req, res) {
+    app.get('/livros', livroController.listar());
 
-        livrosDAO.listar().then(
-            livros => res.marko(
-                require("../views/livros/lista/lista.marko"),
-                {
-                    livros
-                }
-            )
-        ).catch(error=> {console.log(error)});
-    });
+    app.get("/livros/form/:id", livroController.mostrarFormEdicao());
 
-    app.get("/livros/form/:id",function(req,res){
-        const id = req.params.id
-
-        livrosDAO.buscarPorId(id).then(
-            livro => {
-                res.marko(
-                    require("../views/livros/form/form.marko"),
-                    {
-                        livro: livro[0]
-                    }
-                )
-            }
-        ).catch(error=> {
-            console.log(error)
-        })
-    });
-
-    app.get("/livros/form",function(req, res){
-        res.marko( require("../views/livros/form/form.marko"), {livro:{}})
-    });
+    app.get("/livros/form",livroController.mostrarFormCadastro());
 
     
-    app.get("/livros/:id", function(req, res){
-        
-        const id = req.params.id
-
-        livrosDAO.buscarPorId(id).then(
-            livros => {
-                res.marko(
-                    require("../views/livros/lista/lista.marko"),
-                    {
-                        livros
-                    }
-                )
-            }
-        ).catch(error=> {
-            console.log(error)
-        });
-    });
+    app.get("/livros/:id", livroController.filtrarPorId());
 
 
     app.post("/livros", [
-        check('titulo').isLength({ min: 5 }),
-        check('preco').isCurrency(),
-        check('descricao').isLength({min:15})
-    ],function(req,res){
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-          return res.marko(
-              require("../views/livros/form/form.marko"),
-              {livro:{}}
-          );
-        }
+        check('titulo').isLength({ min: 5 }).withMessage("O mínimo de caracteres para o título é de 5 caracteres"),
+        check('preco').isCurrency().withMessage("O preço precisa ser um valor monetário"),
+        check('descricao').isLength({min:15}).withMessage("O mínimo de caracteres para o título é de 15 caracteres")
+    ],
+    livroController.cadastrar());
 
-        const { body } = req;
+    app.put("/livros", livroController.atualizar());
 
-        livrosDAO.inserir(body)
-            .then(()=>res.redirect("/livros"))
-            .catch((error)=>{console.log(error)});
-        
-    });
-
-    app.put("/livros", function(req,res){
-        const { body } = req;
-        livrosDAO.atualizar(body)
-            .then(()=>res.status(200).end())
-            .catch((error)=>{console.log(error)});
-
-    });
-
-    app.delete("/livros/:id",function(req,res){
-        const id = req.params.id
-
-        livrosDAO.remover(id)
-            .then(()=>res.status(200).end())
-            .catch((error)=>{console.log(error); res.status(404)});
-    })
+    app.delete("/livros/:id", livroController.deletar())
 }

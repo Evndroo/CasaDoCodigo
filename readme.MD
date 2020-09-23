@@ -13,7 +13,7 @@
 >
 >
 
----
+
 # Como instalar e testar
 
 Basta baixar o repositório via git com o comando:
