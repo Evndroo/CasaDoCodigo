@@ -13,7 +13,7 @@ module.exports = (app)=>{
     app.route(LivroController.rotas().cadastro)  
         .get(livroController.mostrarFormCadastro())
         .post(LivroModel.validacoes(), livroController.cadastrar())
-        .put(livroController.atualizar());
+        .put(LivroModel.validacoes(), livroController.atualizar());
 
     app.route(LivroController.rotas().idDoLivro)
         .get(livroController.filtrarPorId())

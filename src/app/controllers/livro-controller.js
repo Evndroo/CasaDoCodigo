@@ -97,6 +97,18 @@ class LivroController{
 
     atualizar(){
         return function(req,res){
+
+            const errors = validationResult(req);
+            if (!errors.isEmpty()) {
+              return res.marko(
+                  require("../views/livros/form/form.marko"),
+                    {
+                        livro:req.body,
+                        errosValidacao: errors.array()
+                    }
+              );
+            }
+
             const { body } = req;
             livrosDAO.atualizar(body)
                 .then(()=>res.status(200).end())
