@@ -3,6 +3,7 @@ require('marko/express');
 
 const methodOverride = require("method-override");
 const rotas = require('../app/rotas/routes');
+const sessionConfig = require("./sessao-autenticacao")
 const templates = require("../app/views/templates");
 const express = require('express');
 const app = express();
@@ -18,6 +19,8 @@ app.use(methodOverride(function (req, res) {
       return method
     }
 }))
+
+sessionConfig(app);
 
 rotas(app);
 
