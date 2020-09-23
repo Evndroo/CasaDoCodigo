@@ -5,6 +5,12 @@ const LivroController = require("../controllers/livro-controller");
 
 class SessionController{
 
+    static rotas(){
+        return {
+            login:"/login"
+        }
+    }
+
     loginPage(){
         return function(req,res){ res.marko(templates.login) }
     }
